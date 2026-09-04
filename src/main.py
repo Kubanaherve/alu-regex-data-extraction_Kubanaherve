@@ -4,12 +4,10 @@ import os
 # ALU Regex Data Extraction - main.py
 # I'm writing this to extract data from raw text using regex
 
-# I figure out where the project root is so I can find the input file
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.join(script_dir, "..")
 input_path = os.path.join(project_root, "input", "raw-text.txt")
 
-# I read the raw text file
 with open(input_path, "r") as f:
     text = f.read()
 
@@ -45,13 +43,9 @@ print()
 
 # --- Extract phone numbers ---
 
-# I use this regex to find Rwandan phone numbers.
-# I allow spaces and dashes because people write phone numbers differently.
 phone_pattern = r'(?:\+250[\s-]*[0-9]{3}[\s-]*[0-9]{3}[\s-]*[0-9]{3})|(?:0[0-9]{3}[\s-]*[0-9]{3}[\s-]*[0-9]{3})'
-
 raw_phones = re.findall(phone_pattern, text)
 
-# I normalize each phone number to the +250 format
 phones = []
 for phone in raw_phones:
     digits = phone.replace(" ", "").replace("-", "")
@@ -62,3 +56,24 @@ for phone in raw_phones:
 print("Phone numbers found:", len(phones))
 for p in phones:
     print(" ", p)
+print()
+
+
+# --- Extract URLs ---
+
+# I use this regex to find HTTP and HTTPS URLs.
+# I only accept http and https because I don't want javascript: or data: URLs
+url_pattern = r'https?://[A-Za-z0-9._~:/?#\[\]@!$&\'()*+,;=-]+'
+
+raw_urls = re.findall(url_pattern, text)
+
+# I clean up the URLs a bit
+urls = []
+for url in raw_urls:
+    # I remove trailing punctuation that might have been captured
+    url = url.rstrip(".,;:!?)")
+    urls.append(url)
+
+print("URLs found:", len(urls))
+for u in urls:
+    print(" ", u)
