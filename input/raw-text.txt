@@ -28,3 +28,24 @@ Record #103 — Diane Uwamahoro
   Website she shared: https://students.alueducation.com/profile/diane
   Diane asked about transferring credits. I told her to email registrar.
   Status: open
+
+Record #104 — Patrick Habimana
+  Submitted: 2026-09-04 10:30:00
+  Contact: patrick.habimana@alueducation.com
+  Alternate phone: 0722 334 455
+  He was trying to access http://legacy.example.org/account/49281 but it gave a 404.
+  Status: resolved
+
+Record #105 — Jean Claude Ishimwe
+  Submitted: 2026-09-04 10:55:10
+  Student email: jc.ishimwe@alustudent.com
+  Phone: 0733 221 890
+  He asked when the next intake starts. I told him to check the website.
+  Status: resolved
+
+Record #106 — Alice Uwase
+  Submitted: 2026-09-04 11:15:22
+  alice.uwase@alueducation.com — she wrote in about wifi issues
+  Phone: +250 788 900 112
+  No URL provided.
+  Status: open
