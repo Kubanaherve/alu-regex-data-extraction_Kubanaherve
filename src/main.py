@@ -15,3 +15,18 @@ with open(input_path, "r") as f:
 
 print("Read the input file. It has", len(text), "characters.")
 print()
+
+
+# --- Extract emails ---
+
+# I use this regex to find emails in the text.
+# [A-Za-z0-9._%+-]+ matches the part before the @
+# [A-Za-z0-9.-]+ matches the domain name
+# \.[A-Za-z]{2,} matches the dot and the extension like .com or .org
+email_pattern = r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'
+
+emails = re.findall(email_pattern, text)
+
+print("Emails found:", len(emails))
+for e in emails:
+    print(" ", e)
