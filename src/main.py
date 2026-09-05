@@ -37,6 +37,27 @@ for email in raw_emails:
         continue
     emails.append(email)
 
+# Now I classify each email by its ALU domain type
+email_results = []
+for email in emails:
+    domain = email.split("@")[1].lower()
+
+    if domain == "alueducation.com":
+        email_type = "ALU official"
+    elif domain == "alumni.alueducation.com":
+        email_type = "ALU alumni"
+    elif domain == "si.alueducation.com":
+        email_type = "ALU SI"
+    elif domain == "alustudent.com":
+        email_type = "ALU student"
+    else:
+        email_type = "other"
+
+    email_results.append({
+        "email": email,
+        "type": email_type
+    })
+
 
 # --- Extract phone numbers ---
 
@@ -95,22 +116,20 @@ for card in raw_cards:
 # --- Build the output ---
 
 result = {
-    "emails": emails,
+    "emails": email_results,
     "phone_numbers": phones,
     "urls": urls,
     "credit_cards": cards,
     "summary": {
-        "total_emails": len(emails),
+        "total_emails": len(email_results),
         "total_phones": len(phones),
         "total_urls": len(urls),
         "total_cards": len(cards)
     }
 }
 
-# I make sure the output folder exists
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-# I save the results to a JSON file
 with open(output_path, "w") as f:
     json.dump(result, f, indent=2)
 
@@ -118,7 +137,7 @@ with open(output_path, "w") as f:
 # --- Print a summary ---
 
 print("I found:")
-print("  Emails:", len(emails))
+print("  Emails:", len(email_results))
 print("  Phones:", len(phones))
 print("  URLs:  ", len(urls))
 print("  Cards: ", len(cards))
