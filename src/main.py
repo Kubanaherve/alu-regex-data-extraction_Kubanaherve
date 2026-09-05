@@ -22,37 +22,27 @@ print()
 email_pattern = r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'
 raw_emails = re.findall(email_pattern, text)
 
-# I check each email before adding it to make sure it's actually valid
 emails = []
 for email in raw_emails:
     if email.count("@") != 1:
         continue
-
     parts = email.split("@")
     username = parts[0]
     domain = parts[1]
-
     if len(username) == 0:
         continue
-
     if "." not in domain:
         continue
-
     if domain.endswith("."):
         continue
-
-    # I don't want domains that have too many parts — that looks suspicious
-    # like test@alueducation.com.evil.com (someone faking the domain)
     domain_parts = domain.split(".")
     if len(domain_parts) > 3:
         continue
-
     emails.append(email)
 
 email_results = []
 for email in emails:
     domain = email.split("@")[1].lower()
-
     if domain == "alueducation.com":
         email_type = "ALU official"
     elif domain == "alumni.alueducation.com":
@@ -108,12 +98,18 @@ for url in raw_urls:
 card_pattern = r'\b(\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{1,4})\b'
 raw_cards = re.findall(card_pattern, text)
 
+# I use the Luhn algorithm to check if a card number is valid.
 def luhn_check(number):
     digits = number.replace(" ", "").replace("-", "")
     if not digits.isdigit():
         return False
     if len(digits) < 13 or len(digits) > 19:
         return False
+
+    # I reject all zeros because that's obviously not a real card
+    if all(d == "0" for d in digits):
+        return False
+
     total = 0
     reverse_digits = digits[::-1]
     for i in range(len(reverse_digits)):
