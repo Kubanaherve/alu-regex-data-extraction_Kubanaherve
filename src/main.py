@@ -53,8 +53,14 @@ for email in emails:
     else:
         email_type = "other"
 
+    # I mask the email because I don't want to show the full address in the output.
+    # I keep the first letter and the domain so you can still tell what it is.
+    username = email.split("@")[0]
+    masked_username = username[0] + "****"
+    masked_email = masked_username + "@" + email.split("@")[1]
+
     email_results.append({
-        "email": email,
+        "email": masked_email,
         "type": email_type
     })
 
