@@ -37,7 +37,6 @@ for email in raw_emails:
         continue
     emails.append(email)
 
-# Now I classify each email by its ALU domain type
 email_results = []
 for email in emails:
     domain = email.split("@")[1].lower()
@@ -53,8 +52,6 @@ for email in emails:
     else:
         email_type = "other"
 
-    # I mask the email because I don't want to show the full address in the output.
-    # I keep the first letter and the domain so you can still tell what it is.
     username = email.split("@")[0]
     masked_username = username[0] + "****"
     masked_email = masked_username + "@" + email.split("@")[1]
@@ -70,11 +67,25 @@ for email in emails:
 phone_pattern = r'(?:\+250[\s-]*[0-9]{3}[\s-]*[0-9]{3}[\s-]*[0-9]{3})|(?:0[0-9]{3}[\s-]*[0-9]{3}[\s-]*[0-9]{3})'
 raw_phones = re.findall(phone_pattern, text)
 
+# I normalize each phone number to the +250 format
 phones = []
 for phone in raw_phones:
+    # I remove all spaces and dashes to get just the digits
     digits = phone.replace(" ", "").replace("-", "")
+
+    # If it starts with 0, I replace that with +250
     if digits.startswith("0"):
         digits = "+250" + digits[1:]
+
+    # I make sure the final number is the right length for Rwanda
+    # A Rwanda number should be +250 followed by 9 digits = 13 characters total
+    if not digits.startswith("+250"):
+        continue
+    # I remove the + to count just the digits
+    just_digits = digits.replace("+", "")
+    if len(just_digits) != 12:
+        continue
+
     phones.append(digits)
 
 
