@@ -49,3 +49,26 @@ Record #106 — Alice Uwase
   Phone: +250 788 900 112
   No URL provided.
   Status: open
+
+--- Flagged / Unverified entries below ---
+[2026-09-04 12:00:00] Batch import from old CRM — these records had issues
+
+  bad-email@@alueducation.com         <-- double @ sign, obviously wrong
+  @alueducation.com                   <-- no username before the @
+  test@alueducation                   <-- missing the .com part
+  test@alueducation.com.evil.com      <-- looks like someone faking an ALU domain
+  notarealemail.com                   <-- no @ at all
+
+  +250 788                            <-- too short, only the prefix
+  +250                                <-- just the country code
+  12345                               <-- random number, not a phone
+
+  4111 1111 1111 1234                  <-- looks like a card but doesn't pass Luhn
+  0000 0000 0000 0000                 <-- all zeros, clearly fake
+  1234                                <-- way too short to be a card
+
+  javascript:alert('hello')           <-- this was injected somehow, DO NOT trust
+  data:text/html,<h1>bad</h1>         <-- another suspicious scheme
+
+--- End of export ---
+[2026-09-04 12:05:33] API response complete.
