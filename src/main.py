@@ -1,4 +1,5 @@
 import re
+import json
 import os
 
 # ALU Regex Data Extraction - main.py
@@ -7,6 +8,7 @@ import os
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.join(script_dir, "..")
 input_path = os.path.join(project_root, "input", "raw-text.txt")
+output_path = os.path.join(project_root, "output", "sample-output.json")
 
 with open(input_path, "r") as f:
     text = f.read()
@@ -62,19 +64,15 @@ for url in raw_urls:
 
 # --- Extract credit card numbers ---
 
-# I use this regex to find things that look like credit card numbers.
 card_pattern = r'\b(\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{1,4})\b'
-
 raw_cards = re.findall(card_pattern, text)
 
-# I use the Luhn algorithm to check if a card number is valid.
 def luhn_check(number):
     digits = number.replace(" ", "").replace("-", "")
     if not digits.isdigit():
         return False
     if len(digits) < 13 or len(digits) > 19:
         return False
-
     total = 0
     reverse_digits = digits[::-1]
     for i in range(len(reverse_digits)):
@@ -84,7 +82,6 @@ def luhn_check(number):
             if n > 9:
                 n = n - 9
         total = total + n
-
     return total % 10 == 0
 
 cards = []
@@ -95,9 +92,35 @@ for card in raw_cards:
         cards.append(masked)
 
 
-# --- Print summary ---
+# --- Build the output ---
 
-print("Emails found:", len(emails))
-print("Phones found:", len(phones))
-print("URLs found:  ", len(urls))
-print("Cards found: ", len(cards))
+result = {
+    "emails": emails,
+    "phone_numbers": phones,
+    "urls": urls,
+    "credit_cards": cards,
+    "summary": {
+        "total_emails": len(emails),
+        "total_phones": len(phones),
+        "total_urls": len(urls),
+        "total_cards": len(cards)
+    }
+}
+
+# I make sure the output folder exists
+os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+# I save the results to a JSON file
+with open(output_path, "w") as f:
+    json.dump(result, f, indent=2)
+
+
+# --- Print a summary ---
+
+print("I found:")
+print("  Emails:", len(emails))
+print("  Phones:", len(phones))
+print("  URLs:  ", len(urls))
+print("  Cards: ", len(cards))
+print()
+print("Done. I saved the results in output/sample-output.json")
