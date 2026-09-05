@@ -1,0 +1,55 @@
+{
+  "emails": [
+    {
+      "email": "a****@alueducation.com",
+      "type": "ALU official"
+    },
+    {
+      "email": "e****@alumni.alueducation.com",
+      "type": "ALU alumni"
+    },
+    {
+      "email": "e****@gmail.com",
+      "type": "other"
+    },
+    {
+      "email": "d****@si.alueducation.com",
+      "type": "ALU SI"
+    },
+    {
+      "email": "p****@alueducation.com",
+      "type": "ALU official"
+    },
+    {
+      "email": "j****@alustudent.com",
+      "type": "ALU student"
+    },
+    {
+      "email": "a****@alueducation.com",
+      "type": "ALU official"
+    }
+  ],
+  "phone_numbers": [
+    "+250788123456",
+    "+250788555221",
+    "+250728456789",
+    "+250722334455",
+    "+250733221890",
+    "+250788900112"
+  ],
+  "urls": [
+    "https://students.alueducation.com/profile/aline",
+    "https://www.linkedin.com/in/eric-niyonzima",
+    "https://students.alueducation.com/profile/diane",
+    "http://legacy.example.org/account/49281"
+  ],
+  "credit_cards": [
+    "************1111"
+  ],
+  "summary": {
+    "total_emails": 7,
+    "total_phones": 6,
+    "total_urls": 4,
+    "total_cards": 1
+  }
+}
