@@ -22,19 +22,31 @@ print()
 email_pattern = r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'
 raw_emails = re.findall(email_pattern, text)
 
+# I check each email before adding it to make sure it's actually valid
 emails = []
 for email in raw_emails:
     if email.count("@") != 1:
         continue
+
     parts = email.split("@")
     username = parts[0]
     domain = parts[1]
+
     if len(username) == 0:
         continue
+
     if "." not in domain:
         continue
+
     if domain.endswith("."):
         continue
+
+    # I don't want domains that have too many parts — that looks suspicious
+    # like test@alueducation.com.evil.com (someone faking the domain)
+    domain_parts = domain.split(".")
+    if len(domain_parts) > 3:
+        continue
+
     emails.append(email)
 
 email_results = []
@@ -67,25 +79,16 @@ for email in emails:
 phone_pattern = r'(?:\+250[\s-]*[0-9]{3}[\s-]*[0-9]{3}[\s-]*[0-9]{3})|(?:0[0-9]{3}[\s-]*[0-9]{3}[\s-]*[0-9]{3})'
 raw_phones = re.findall(phone_pattern, text)
 
-# I normalize each phone number to the +250 format
 phones = []
 for phone in raw_phones:
-    # I remove all spaces and dashes to get just the digits
     digits = phone.replace(" ", "").replace("-", "")
-
-    # If it starts with 0, I replace that with +250
     if digits.startswith("0"):
         digits = "+250" + digits[1:]
-
-    # I make sure the final number is the right length for Rwanda
-    # A Rwanda number should be +250 followed by 9 digits = 13 characters total
     if not digits.startswith("+250"):
         continue
-    # I remove the + to count just the digits
     just_digits = digits.replace("+", "")
     if len(just_digits) != 12:
         continue
-
     phones.append(digits)
 
 
@@ -149,9 +152,6 @@ os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
 with open(output_path, "w") as f:
     json.dump(result, f, indent=2)
-
-
-# --- Print a summary ---
 
 print("I found:")
 print("  Emails:", len(email_results))
