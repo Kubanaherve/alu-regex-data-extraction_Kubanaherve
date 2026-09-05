@@ -113,7 +113,7 @@ After finding something that looks like a card number, I use the **Luhn algorith
 
 ## Security
 
-I treated the raw text as untrusted because it's supposed to come from an external API. Here's what I did:
+I treat the raw text as untrusted because it's supposed to come from an external API. Here's what I did:
 
 - **I don't execute anything** from the text. I don't use `eval()` or `exec()`. I only look for patterns.
 - **I mask emails** — I only show the first letter and replace the rest of the username with `****`. For example, `aline.mukamana@alueducation.com` becomes `a****@alueducation.com`.
