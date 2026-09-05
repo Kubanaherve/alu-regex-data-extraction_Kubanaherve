@@ -35,11 +35,6 @@ for email in raw_emails:
         continue
     emails.append(email)
 
-print("Valid emails found:", len(emails))
-for e in emails:
-    print(" ", e)
-print()
-
 
 # --- Extract phone numbers ---
 
@@ -53,27 +48,56 @@ for phone in raw_phones:
         digits = "+250" + digits[1:]
     phones.append(digits)
 
-print("Phone numbers found:", len(phones))
-for p in phones:
-    print(" ", p)
-print()
-
 
 # --- Extract URLs ---
 
-# I use this regex to find HTTP and HTTPS URLs.
-# I only accept http and https because I don't want javascript: or data: URLs
 url_pattern = r'https?://[A-Za-z0-9._~:/?#\[\]@!$&\'()*+,;=-]+'
-
 raw_urls = re.findall(url_pattern, text)
 
-# I clean up the URLs a bit
 urls = []
 for url in raw_urls:
-    # I remove trailing punctuation that might have been captured
     url = url.rstrip(".,;:!?)")
     urls.append(url)
 
-print("URLs found:", len(urls))
-for u in urls:
-    print(" ", u)
+
+# --- Extract credit card numbers ---
+
+# I use this regex to find things that look like credit card numbers.
+card_pattern = r'\b(\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{1,4})\b'
+
+raw_cards = re.findall(card_pattern, text)
+
+# I use the Luhn algorithm to check if a card number is valid.
+def luhn_check(number):
+    digits = number.replace(" ", "").replace("-", "")
+    if not digits.isdigit():
+        return False
+    if len(digits) < 13 or len(digits) > 19:
+        return False
+
+    total = 0
+    reverse_digits = digits[::-1]
+    for i in range(len(reverse_digits)):
+        n = int(reverse_digits[i])
+        if i % 2 == 1:
+            n = n * 2
+            if n > 9:
+                n = n - 9
+        total = total + n
+
+    return total % 10 == 0
+
+cards = []
+for card in raw_cards:
+    if luhn_check(card):
+        digits = card.replace(" ", "").replace("-", "")
+        masked = "*" * (len(digits) - 4) + digits[-4:]
+        cards.append(masked)
+
+
+# --- Print summary ---
+
+print("Emails found:", len(emails))
+print("Phones found:", len(phones))
+print("URLs found:  ", len(urls))
+print("Cards found: ", len(cards))
